@@ -61,7 +61,9 @@ exports.findOne = (req, res) => {
 
 // find all cuisine_id recipes
 exports.findAllByCuisine = (req, res) => {
-  Recipe.getAllByCuisine((err, data) => {
+  const cuisine_id = req.params.cuisine_id;
+
+  Recipe.getAllByCuisine(cuisine_id, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving recipes.",
@@ -78,8 +80,6 @@ exports.update = (req, res) => {
       message: "Content can not be empty!",
     });
   }
-
-  console.log(req.body);
 
   Recipe.updateById(req.params.id, new Recipe(req.body), (err, data) => {
     if (err) {
