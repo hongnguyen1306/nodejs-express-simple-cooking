@@ -1,4 +1,5 @@
 var express = require("express");
+const cors = require("cors");
 var bodyparser = require("body-parser");
 
 var recipeRouter = require("./app/routes/recipe.routes");
@@ -8,6 +9,7 @@ var app = express();
 
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
+app.use(cors());
 
 // simple route
 app.get("/", (req, res) => {
@@ -17,7 +19,7 @@ app.get("/", (req, res) => {
 app.use("/api/recipes", recipeRouter);
 app.use("/api/recipesIngredients", recipeIngredientRouter);
 
-var server = app.listen(3000, function () {
+var server = app.listen(5000, function () {
   console.log("Server listening on port " + server.address().port);
 });
 module.exports = app;

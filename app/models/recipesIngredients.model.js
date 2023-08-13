@@ -36,4 +36,20 @@ RecipeIngredient.getAllByRecipe = (recipe_id, result) => {
   );
 };
 
+RecipeIngredient.getStepsByRecipe = async (ids) => {
+  return new Promise((resolve, reject) => {
+    sql.query(
+      `SELECT detail FROM recipe_ingredients WHERE recipe_id  = ${ids}`,
+      (err, res) => {
+        if (err) {
+          console.log("error: ", err);
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      }
+    );
+  });
+};
+
 module.exports = RecipeIngredient;
