@@ -9,4 +9,9 @@ var connection = mysql.createPool({
   database: dbConfig.DB,
 });
 
+connection.getConnection((err, conn) => {
+  if (err) console.log(err);
+  console.log("Connected database successfully");
+});
+
 module.exports = connection;

@@ -7,6 +7,8 @@ var recipeIngredientRouter = require("./app/routes/recipeIngredient.routes");
 
 var app = express();
 
+require("dotenv").config();
+
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 app.use(cors());
@@ -19,7 +21,10 @@ app.get("/", (req, res) => {
 app.use("/api/recipes", recipeRouter);
 app.use("/api/recipesIngredients", recipeIngredientRouter);
 
-var server = app.listen(5000, function () {
+const PORT = process.env.PORT || 5500;
+
+var server = app.listen(PORT, function () {
   console.log("Server listening on port " + server.address().port);
 });
+
 module.exports = app;

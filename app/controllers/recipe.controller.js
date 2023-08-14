@@ -1,7 +1,5 @@
 const RecipesIngredient = require("../models/recipesIngredients.model.js");
 const Recipe = require("../models/recipe.model.js");
-const Cuisine = require("../models/cuisine.mode.js");
-const Ingredient = require("../models/ingredient.model.js");
 
 // Create and Save a new Recipe
 exports.create = (req, res) => {
