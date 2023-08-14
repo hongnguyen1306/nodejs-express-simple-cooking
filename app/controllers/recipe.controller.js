@@ -1,5 +1,7 @@
 const RecipesIngredient = require("../models/recipesIngredients.model.js");
 const Recipe = require("../models/recipe.model.js");
+const Cuisine = require("../models/cuisine.mode.js");
+const Ingredient = require("../models/ingredient.model.js");
 
 // Create and Save a new Recipe
 exports.create = (req, res) => {
@@ -57,21 +59,35 @@ exports.findOne = (req, res) => {
         });
       }
     } else {
+      console.log(data);
       const data2 = JSON.parse(JSON.stringify(data));
       const testData = await RecipesIngredient.getStepsByRecipe(data2.id);
       const data3 = JSON.parse(JSON.stringify(testData));
       data2.steps = data3;
-      console.log(data3);
       res.send(data2);
     }
   });
 };
 
-// find all cuisine_id recipes
+// find all by cuisine
 exports.findAllByCuisine = (req, res) => {
-  const cuisine_id = req.params.cuisine_id;
+  const key = req.params.key;
 
-  Recipe.getAllByCuisine(cuisine_id, (err, data) => {
+  Recipe.getRecipeByCuisine(key, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving recipes.",
+      });
+    else res.send(data);
+  });
+};
+
+// find all by ingredient
+exports.findAllByIngredient = (req, res) => {
+  const key = req.params.key;
+  console.log("key ", key);
+
+  Recipe.getRecipesByIngredient(key, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || "Some error occurred while retrieving recipes.",

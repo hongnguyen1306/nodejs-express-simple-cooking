@@ -1,6 +1,5 @@
 const sql = require("./db.js");
 
-// constructor
 const Recipe = function (recipe) {
   this.cuisine_id = recipe.cuisine_id;
   this.name = recipe.name;
@@ -22,13 +21,12 @@ Recipe.findById = (id, result) => {
       return;
     }
 
-    // not found Recipe with the id
     result({ kind: "not_found" }, null);
   });
 };
 
 Recipe.getAll = (title, result) => {
-  let query = "SELECT * FROM recipes";
+  let query = `SELECT recipes.*, cuisines.cuisine_name  FROM recipes JOIN cuisines ON recipes.cuisine_id = cuisines.id `;
 
   if (title) {
     query += ` WHERE name LIKE '%${title}%'`;
@@ -44,9 +42,13 @@ Recipe.getAll = (title, result) => {
   });
 };
 
-Recipe.getAllByCuisine = (cuisine_id, result) => {
+Recipe.getRecipeByCuisine = (value, result) => {
   sql.query(
-    `SELECT * FROM recipes WHERE cuisine_id = ${cuisine_id}`,
+    `SELECT recipes.*
+     FROM recipes
+     JOIN cuisines ON recipes.cuisine_id = cuisines.id
+     WHERE cuisines.cuisine_name LIKE '%${value}%'
+     GROUP BY recipes.id`,
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -69,6 +71,25 @@ Recipe.getRecipesByKey = async (ids) => {
       }
     });
   });
+};
+
+Recipe.getRecipesByIngredient = (value, result) => {
+  sql.query(
+    `SELECT recipes.*
+     FROM recipes
+     JOIN recipe_ingredients ON recipes.id = recipe_ingredients.recipe_id
+     JOIN ingredients ON recipe_ingredients.ingredient_id = ingredients.id
+     WHERE ingredients.ingredient_name LIKE '%${value}%'
+     GROUP BY recipes.id`,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    }
+  );
 };
 
 module.exports = Recipe;
